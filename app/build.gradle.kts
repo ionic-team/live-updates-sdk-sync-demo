@@ -50,6 +50,7 @@ dependencies {
 
     implementation(libs.liveupdates)
 
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core.ktx)
