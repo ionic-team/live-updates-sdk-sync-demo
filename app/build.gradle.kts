@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "io.ionic.concurrencytestapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -47,7 +47,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.liveupdates)
 
     implementation(libs.kotlinx.coroutines.android)

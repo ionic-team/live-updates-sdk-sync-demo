@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,8 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.ionic.concurrencytestapp.ui.theme.ConcurrencyTestAppTheme
 
@@ -53,46 +56,23 @@ fun LiveUpdateGui(paddingValues: PaddingValues) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LiveUpdateInfo(liveUpdateViewModel)
         UpdateButtons(liveUpdateViewModel)
+        LiveUpdateInfo(liveUpdateViewModel)
     }
 }
 
 @Composable
 fun LiveUpdateInfo(liveUpdateViewModel: UpdateViewModel) {
-    val status = liveUpdateViewModel.status.observeAsState()
-    val startTime = liveUpdateViewModel.startTime.observeAsState()
-    val stopTime = liveUpdateViewModel.stopTime.observeAsState()
-    val duration = liveUpdateViewModel.duration.observeAsState()
+    val logItems = liveUpdateViewModel.log
 
-    Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier.padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("Status: ${status.value ?: "Idle"}")
-        }
-        Row(
-            modifier = Modifier.padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("Start Time: ${startTime.value ?: "N/A"}")
-        }
-        Row(
-            modifier = Modifier.padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("Stop Time: ${stopTime.value ?: "N/A"}")
-        }
-        Row(
-            modifier = Modifier.padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("Duration: ${duration.value ?: "N/A"}")
+    LazyColumn {
+        items(logItems.size) {
+            Row(
+                modifier = Modifier.padding(2.dp),
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(logItems[it], fontSize = 10.sp)
+            }
         }
     }
 }
@@ -100,18 +80,24 @@ fun LiveUpdateInfo(liveUpdateViewModel: UpdateViewModel) {
 @Composable
 fun UpdateButtons(liveUpdateViewModel: UpdateViewModel) {
     val enabled = liveUpdateViewModel.enabled.observeAsState()
+    val context = LocalContext.current
 
     FilledTonalButton(
-        onClick = liveUpdateViewModel::syncAllAtOnce,
+        onClick = { liveUpdateViewModel.syncAllAtOnce(context) },
         enabled = enabled.value ?: true
     ) {
         Text("Sync all apps at once")
     }
     FilledTonalButton(
-        onClick = liveUpdateViewModel::syncStaggered,
+        onClick = { liveUpdateViewModel.syncStaggered(context) },
         enabled = enabled.value ?: true
     ) {
         Text("Sync staggered")
+    }
+    FilledTonalButton(
+        onClick = { liveUpdateViewModel.reset(context) }
+    ) {
+        Text("Reset")
     }
 }
 

@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Concurrency Test App"
 include(":app")
- 
