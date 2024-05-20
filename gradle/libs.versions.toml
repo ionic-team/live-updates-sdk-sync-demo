@@ -9,7 +9,7 @@ kotlinxCoroutinesAndroid = "1.7.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 composeBom = "2024.05.00"
-liveupdates = "0.5.2"
+liveupdates = "0.5.3"
 runtimeLivedata = "1.6.7"
 
 [libraries]
